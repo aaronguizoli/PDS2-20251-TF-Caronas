@@ -6,7 +6,7 @@
 #include <limits>
 
 
-int main() {
+void menuPrincipal() {
     int opcao;
     std::string nomeLogado;
     do {
