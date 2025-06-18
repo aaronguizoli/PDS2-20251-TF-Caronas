@@ -5,6 +5,8 @@
 #include <map>
 #include <algorithm>
 #include <limits> // Necessário para numeric_limits
+#include <fstream> // Para leitura e escrita de arquivos
+#include <sstream> // Para manipulação de strings
 
 // --- Protótipos (Forward Declarations) ---
 // Usado para resolver dependências circulares entre as classes.
@@ -181,6 +183,125 @@ private:
     void limparBufferEntrada() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
+
+    // Salva os dados dos usuários e caronas em arquivos.
+    void salvarDados() const {
+        // Salva usuários
+        std::ofstream arquivoUsuarios("usuarios.txt");
+        if (arquivoUsuarios.is_open()) {
+            for (const auto& par : usuarios) {
+                const auto& usuario = par.second;
+                arquivoUsuarios << usuario->nomeCompleto << ";"
+                                << usuario->email << ";"
+                                << usuario->telefone << ";";
+                if (usuario->veiculo) {
+                    arquivoUsuarios << "1;" << usuario->veiculo->modelo << ";"
+                                    << usuario->veiculo->cor << ";"
+                                    << usuario->veiculo->placa << "\n";
+                } else {
+                    arquivoUsuarios << "0;nenhum;nenhum;nenhum\n";
+                }
+            }
+        }
+        arquivoUsuarios.close();
+
+        // Salva caronas
+        std::ofstream arquivoCaronas("caronas.txt");
+        if(arquivoCaronas.is_open()){
+            for(const auto& carona : caronasDisponiveis){
+                arquivoCaronas << carona->motorista->nomeCompleto << ";"
+                               << carona->origem << ";" << carona->destino << ";"
+                               << carona->dataHoraPartida << ";" << carona->vagasDisponiveis << ";"
+                               << carona->valorSugerido << ";";
+                // Salva passageiros aprovados
+                for(size_t i = 0; i < carona->passageirosAprovados.size(); ++i){
+                    arquivoCaronas << carona->passageirosAprovados[i]->nomeCompleto << (i == carona->passageirosAprovados.size() - 1 ? "" : ",");
+                }
+                arquivoCaronas << ";";
+                 // Salva solicitações pendentes
+                for(size_t i = 0; i < carona->solicitacoesPendentes.size(); ++i){
+                    arquivoCaronas << carona->solicitacoesPendentes[i]->nomeCompleto << (i == carona->solicitacoesPendentes.size() - 1 ? "" : ",");
+                }
+                arquivoCaronas << "\n";
+            }
+        }
+        arquivoCaronas.close();
+    }
+
+    // Carrega os dados dos usuários e caronas dos arquivos.
+    void carregarDados() {
+        // Carrega usuários
+        std::ifstream arquivoUsuarios("usuarios.txt");
+        std::string linha, nome, email, tel, temVeiculo, modelo, cor, placa;
+        if (arquivoUsuarios.is_open()) {
+            while (std::getline(arquivoUsuarios, linha)) {
+                std::stringstream ss(linha);
+                std::getline(ss, nome, ';');
+                std::getline(ss, email, ';');
+                std::getline(ss, tel, ';');
+                std::getline(ss, temVeiculo, ';');
+
+                auto novoUsuario = std::make_shared<Usuario>(nome, tel, email);
+                if (temVeiculo == "1") {
+                    std::getline(ss, modelo, ';');
+                    std::getline(ss, cor, ';');
+                    std::getline(ss, placa, ';');
+                    novoUsuario->adicionarVeiculo(modelo, cor, placa);
+                }
+                usuarios[nome] = novoUsuario;
+            }
+        }
+        arquivoUsuarios.close();
+        
+        // Carrega caronas
+        std::ifstream arquivoCaronas("caronas.txt");
+        if(arquivoCaronas.is_open()){
+             while (std::getline(arquivoCaronas, linha)) {
+                std::stringstream ss(linha);
+                std::string nomeMotorista, origem, destino, data, vagasStr, valorStr;
+                std::string aprovadosStr, pendentesStr;
+                int vagas;
+                double valor;
+
+                std::getline(ss, nomeMotorista, ';');
+                std::getline(ss, origem, ';');
+                std::getline(ss, destino, ';');
+                std::getline(ss, data, ';');
+                std::getline(ss, vagasStr, ';');
+                std::getline(ss, valorStr, ';');
+                std::getline(ss, aprovadosStr, ';');
+                std::getline(ss, pendentesStr, ';');
+
+                if(usuarios.count(nomeMotorista)){
+                    vagas = std::stoi(vagasStr);
+                    valor = std::stod(valorStr);
+                    auto novaCarona = std::make_shared<Carona>(origem, destino, data, vagas, valor, usuarios[nomeMotorista]);
+                    
+                    // Adiciona passageiros aprovados
+                    std::stringstream ssAprovados(aprovadosStr);
+                    std::string nomeAprovado;
+                    while(std::getline(ssAprovados, nomeAprovado, ',')){
+                        if(usuarios.count(nomeAprovado)) novaCarona->passageirosAprovados.push_back(usuarios[nomeAprovado]);
+                    }
+
+                    // Adiciona solicitações pendentes
+                    std::stringstream ssPendentes(pendentesStr);
+                    std::string nomePendente;
+                    while(std::getline(ssPendentes, nomePendente, ',')){
+                        if(usuarios.count(nomePendente)) novaCarona->solicitacoesPendentes.push_back(usuarios[nomePendente]);
+                    }
+
+                    caronasDisponiveis.push_back(novaCarona);
+                    // Adiciona ao histórico de todos os envolvidos
+                    usuarios[nomeMotorista]->historicoDeCaronas.push_back(novaCarona);
+                    for(const auto& p : novaCarona->passageirosAprovados) p->historicoDeCaronas.push_back(novaCarona);
+                    for(const auto& p : novaCarona->solicitacoesPendentes) p->historicoDeCaronas.push_back(novaCarona);
+                }
+             }
+        }
+        arquivoCaronas.close();
+    }
+
 
 public:
     // User Story 5: Manter perfil atualizado
@@ -488,6 +609,7 @@ public:
     
     // Loop principal da aplicação.
     void rodar() {
+        carregarDados();
         login();
 
         int opcao = -1;
@@ -535,7 +657,8 @@ public:
                     telaDeAvaliacao();
                     break;
                 case 0:
-                    std::cout << "Ate logo!" << std::endl;
+                    salvarDados(); // Salva os dados antes de sair
+                    std::cout << "Dados salvos. Ate logo!" << std::endl;
                     break;
                 default:
                     std::cout << "Opcao invalida. Tente novamente." << std::endl;
