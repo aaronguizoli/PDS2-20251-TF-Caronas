@@ -1,0 +1,40 @@
+João Silva;joao.silva@email.com;31988887777;1;Fiat Palio;Prata;ABC1234
+Maria Oliveira;maria.o@email.com;31999998888;1;Honda Civic;Preto;XYZ5678
+Lucas Santos;lucas.s@email.com;31987654321;1;Chevrolet Onix;Branco;DEF4567
+Gabriel Souza;gabriel.s@email.com;31912345678;1;Hyundai HB20;Cinza;GHI8901
+Matheus Fernandes;matheus.f@email.com;31988776655;1;Renault Kwid;Laranja;JKL2345
+Rafael Lima;rafael.l@email.com;31977665544;1;Volkswagen Gol;Vermelho;MNO6789
+Bruno Gomes;bruno.g@email.com;31966554433;1;Fiat Argo;Azul;PQR0123
+Felipe Alves;felipe.a@email.com;31955443322;1;Jeep Renegade;Verde;STU4567
+Leonardo Martins;leo.m@email.com;31944332211;1;Toyota Corolla;Prata;VWX8901
+Ricardo Rocha;ricardo.r@email.com;31933221100;1;Ford Ka;Preto;YZA2345
+Amanda Costa;amanda.c@email.com;31922110099;1;Fiat Mobi;Branco;BCD6789
+Juliana Ribeiro;juliana.r@email.com;31911009988;1;Chevrolet Tracker;Cinza;EFG0123
+Fernanda Almeida;fernanda.a@email.com;31900998877;1;Nissan Kicks;Branco;HIJ4567
+Patrícia Dias;patricia.d@email.com;31999887766;1;Hyundai Creta;Prata;KLM8901
+Camila Barbosa;camila.b@email.com;31988776655;1;Volkswagen T-Cross;Azul;NOP2345
+Tiago Moreira;tiago.m@email.com;31977665544;1;Renault Duster;Marrom;QRS6789
+Gustavo Carvalho;gustavo.c@email.com;31966554433;1;Peugeot 208;Vermelho;TUV0123
+Vinícius Pereira;vinicius.p@email.com;31955443322;1;Citroen C4 Cactus;Branco;WXY4567
+Larissa Ferreira;larissa.f@email.com;31944332211;1;Toyota Yaris;Cinza;ZAB8901
+Beatriz Castro;beatriz.c@email.com;31933221100;1;Honda HR-V;Preto;CDE2345
+Carlos Pereira;carlos.p@email.com;31977776666;0;nenhum;nenhum;nenhum
+Ana Souza;ana.s@email.com;31966665555;0;nenhum;nenhum;nenhum
+Pedro Costa;pedro.c@email.com;31955554444;0;nenhum;nenhum;nenhum
+Sofia Lima;sofia.l@email.com;31944443333;0;nenhum;nenhum;nenhum
+Julia Alves;julia.a@email.com;31933332222;0;nenhum;nenhum;nenhum
+Laura Martins;laura.m@email.com;31922221111;0;nenhum;nenhum;nenhum
+Isabella Gomes;isabella.g@email.com;31911110000;0;nenhum;nenhum;nenhum
+Manuela Ribeiro;manuela.r@email.com;31900009999;0;nenhum;nenhum;nenhum
+Heloísa Dias;heloisa.d@email.com;31998765432;0;nenhum;nenhum;nenhum
+Alice Barbosa;alice.b@email.com;31987654321;0;nenhum;nenhum;nenhum
+Enzo Moreira;enzo.m@email.com;31976543210;0;nenhum;nenhum;nenhum
+Miguel Carvalho;miguel.c@email.com;31965432109;0;nenhum;nenhum;nenhum
+Arthur Pereira;arthur.p@email.com;31954321098;0;nenhum;nenhum;nenhum
+Davi Ferreira;davi.f@email.com;31943210987;0;nenhum;nenhum;nenhum
+Bernardo Castro;bernardo.c@email.com;31932109876;0;nenhum;nenhum;nenhum
+Heitor Santos;heitor.s@email.com;31921098765;0;nenhum;nenhum;nenhum
+Helena Fernandes;helena.f@email.com;31910987654;0;nenhum;nenhum;nenhum
+Valentina Rocha;valentina.r@email.com;31909876543;0;nenhum;nenhum;nenhum
+Lorenzo Almeida;lorenzo.a@email.com;31998765432;0;nenhum;nenhum;nenhum
+Théo Gomes;theo.g@email.com;31987654321;0;nenhum;nenhum;nenhum
