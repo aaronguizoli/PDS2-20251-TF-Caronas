@@ -4,18 +4,18 @@
 #include <memory>
 #include <map>
 #include <algorithm>
-#include <limits> // Necessário para numeric_limits
-#include <fstream> // Para leitura e escrita de arquivos
-#include <sstream> // Para manipulação de strings
+#include <limits> // Necessary for numeric_limits
+#include <fstream> // For file I/O
+#include <sstream> // For string manipulation
 
-// --- Protótipos (Forward Declarations) ---
-// Usado para resolver dependências circulares entre as classes.
+// --- Forward Declarations ---
+// Used to resolve circular dependencies between classes.
 class Usuario;
 class Carona;
 class Avaliacao;
 
-// --- Classe Veiculo ---
-// Armazena informações sobre o veículo de um motorista.
+// --- Veiculo Class ---
+// Stores information about a driver's vehicle.
 class Veiculo {
 public:
     std::string modelo;
@@ -30,21 +30,21 @@ public:
     }
 };
 
-// --- Classe Avaliacao ---
-// Representa uma avaliação (nota e comentário) que um usuário faz de outro.
+// --- Avaliacao Class ---
+// Represents a rating (score and comment) that one user gives to another.
 class Avaliacao {
 public:
-    int nota; // 1 a 5
+    int nota; // 1 to 5
     std::string comentario;
-    std::weak_ptr<Usuario> avaliador; // Quem fez a avaliação
-    std::weak_ptr<Usuario> avaliado;  // Quem foi avaliado
+    std::weak_ptr<Usuario> avaliador; // Who gave the rating
+    std::weak_ptr<Usuario> avaliado;  // Who was rated
 
     Avaliacao(int n, std::string c, std::shared_ptr<Usuario> p_avaliador, std::shared_ptr<Usuario> p_avaliado)
         : nota(n), comentario(c), avaliador(p_avaliador), avaliado(p_avaliado) {}
 };
 
-// --- Classe Notificacao ---
-// Representa uma notificação a ser enviada para um usuário.
+// --- Notificacao Class ---
+// Represents a notification to be sent to a user.
 class Notificacao {
 public:
     std::string mensagem;
@@ -54,8 +54,8 @@ public:
 };
 
 
-// --- Classe Usuario ---
-// Classe principal para representar tanto Motoristas quanto Passageiros.
+// --- Usuario Class ---
+// Main class to represent both Drivers and Passengers.
 class Usuario {
 private:
     std::vector<std::shared_ptr<Avaliacao>> avaliacoesRecebidas;
@@ -64,19 +64,19 @@ public:
     std::string nomeCompleto;
     std::string telefone;
     std::string email;
-    std::unique_ptr<Veiculo> veiculo; // Ponteiro único, pois só um usuário tem um veículo.
+    std::unique_ptr<Veiculo> veiculo; // Unique pointer, as only one user has one vehicle.
     std::vector<std::shared_ptr<Notificacao>> notificacoes;
     std::vector<std::shared_ptr<Carona>> historicoDeCaronas;
 
     Usuario(std::string nome, std::string tel, std::string mail)
         : nomeCompleto(nome), telefone(tel), email(mail), veiculo(nullptr) {}
 
-    // Adiciona um veículo ao usuário, tornando-o um motorista.
+    // Adds a vehicle to the user, making them a driver.
     void adicionarVeiculo(std::string modelo, std::string cor, std::string placa) {
         veiculo = std::make_unique<Veiculo>(modelo, cor, placa);
     }
 
-    // Calcula e retorna a média das avaliações recebidas.
+    // Calculates and returns the average of received ratings.
     double getMediaDeAvaliacoes() const {
         if (avaliacoesRecebidas.empty()) {
             return 0.0;
@@ -96,7 +96,7 @@ public:
         notificacoes.push_back(std::make_shared<Notificacao>(mensagem));
     }
     
-    // Exibe o perfil do usuário.
+    // Displays the user's profile.
     void exibirPerfil() const {
         std::cout << "\n--- Perfil de " << nomeCompleto << " ---" << std::endl;
         std::cout << "  - E-mail: " << email << std::endl;
@@ -110,8 +110,8 @@ public:
 };
 
 
-// --- Classe Carona ---
-// Representa uma viagem oferecida por um motorista.
+// --- Carona Class ---
+// Represents a ride offered by a driver.
 class Carona {
 public:
     std::string origem;
@@ -126,22 +126,22 @@ public:
     Carona(std::string orig, std::string dest, std::string data, int vagas, double valor, std::shared_ptr<Usuario> mot)
         : origem(orig), destino(dest), dataHoraPartida(data), vagasDisponiveis(vagas), valorSugerido(valor), motorista(mot) {}
 
-    // Adiciona uma solicitação de um passageiro.
+    // Adds a request from a passenger.
     void adicionarSolicitacao(std::shared_ptr<Usuario> passageiro) {
         solicitacoesPendentes.push_back(passageiro);
         std::string msg = passageiro->nomeCompleto + " solicitou uma vaga na sua carona de " + origem + " para " + destino + ".";
         motorista->adicionarNotificacao(msg);
     }
 
-    // Aprova uma solicitação, se houver vagas.
+    // Approves a request if there are available seats.
     bool aprovarSolicitacao(std::shared_ptr<Usuario> passageiro) {
         if (vagasDisponiveis > 0) {
             passageirosAprovados.push_back(passageiro);
             vagasDisponiveis--;
-            // Remove da lista de pendentes
+            // Remove from the pending list
             solicitacoesPendentes.erase(
                 std::remove_if(solicitacoesPendentes.begin(), solicitacoesPendentes.end(),
-                               [&](const std::shared_ptr<Usuario>& p) { return p->nomeCompleto == passageiro->nomeCompleto; }),
+                               [&](const std::shared_ptr<Usuario>& p) { return p->email == passageiro->email; }),
                 solicitacoesPendentes.end());
             
             std::string msg = "Sua solicitacao para a carona de " + origem + " para " + destino + " foi APROVADA.";
@@ -151,19 +151,19 @@ public:
         return false;
     }
     
-    // Rejeita uma solicitação.
+    // Rejects a request.
     void rejeitarSolicitacao(std::shared_ptr<Usuario> passageiro) {
-        // Remove da lista de pendentes
+        // Remove from the pending list
         solicitacoesPendentes.erase(
             std::remove_if(solicitacoesPendentes.begin(), solicitacoesPendentes.end(),
-                           [&](const std::shared_ptr<Usuario>& p) { return p->nomeCompleto == passageiro->nomeCompleto; }),
+                           [&](const std::shared_ptr<Usuario>& p) { return p->email == passageiro->email; }),
             solicitacoesPendentes.end());
             
         std::string msg = "Sua solicitacao para a carona de " + origem + " para " + destino + " foi REJEITADA.";
         passageiro->adicionarNotificacao(msg);
     }
 
-    // Exibe um resumo da carona na lista de busca.
+    // Displays a summary of the ride in the search list.
     void exibirResumo() const {
         std::cout << "  Origem: " << origem << " | Destino: " << destino << " | Data: " << dataHoraPartida << std::endl;
         std::cout << "  Motorista: " << motorista->nomeCompleto << " (" << motorista->getMediaDeAvaliacoes() << " estrelas)" << std::endl;
@@ -171,25 +171,37 @@ public:
     }
 };
 
-// --- Classe App ---
-// Classe principal que gerencia o estado do sistema (usuários, caronas, etc.)
+// --- App Class ---
+// Main class that manages the system's state (users, rides, etc.)
 class App {
 private:
-    std::map<std::string, std::shared_ptr<Usuario>> usuarios;
+    // Map to store users with their email as the unique key.
+    std::map<std::string, std::shared_ptr<Usuario>> usuariosPorEmail;
     std::vector<std::shared_ptr<Carona>> caronasDisponiveis;
     std::shared_ptr<Usuario> usuarioLogado = nullptr;
 
-    // Limpa o buffer do 'cin' para evitar problemas de leitura.
+    // Clears the 'cin' buffer to prevent reading issues.
     void limparBufferEntrada() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
+    
+    // Helper function to find a user by their full name.
+    std::shared_ptr<Usuario> findUsuarioPorNome(const std::string& nome) {
+        for(const auto& par : usuariosPorEmail) {
+            if (par.second->nomeCompleto == nome) {
+                return par.second;
+            }
+        }
+        return nullptr;
+    }
 
-    // Salva os dados dos usuários e caronas em arquivos.
+
+    // Saves user and ride data to files.
     void salvarDados() const {
-        // Salva usuários
+        // Save users
         std::ofstream arquivoUsuarios("usuarios.txt");
         if (arquivoUsuarios.is_open()) {
-            for (const auto& par : usuarios) {
+            for (const auto& par : usuariosPorEmail) {
                 const auto& usuario = par.second;
                 arquivoUsuarios << usuario->nomeCompleto << ";"
                                 << usuario->email << ";"
@@ -205,7 +217,7 @@ private:
         }
         arquivoUsuarios.close();
 
-        // Salva caronas
+        // Save rides
         std::ofstream arquivoCaronas("caronas.txt");
         if(arquivoCaronas.is_open()){
             for(const auto& carona : caronasDisponiveis){
@@ -213,12 +225,12 @@ private:
                                << carona->origem << ";" << carona->destino << ";"
                                << carona->dataHoraPartida << ";" << carona->vagasDisponiveis << ";"
                                << carona->valorSugerido << ";";
-                // Salva passageiros aprovados
+                // Save approved passengers by name
                 for(size_t i = 0; i < carona->passageirosAprovados.size(); ++i){
                     arquivoCaronas << carona->passageirosAprovados[i]->nomeCompleto << (i == carona->passageirosAprovados.size() - 1 ? "" : ",");
                 }
                 arquivoCaronas << ";";
-                 // Salva solicitações pendentes
+                 // Save pending requests by name
                 for(size_t i = 0; i < carona->solicitacoesPendentes.size(); ++i){
                     arquivoCaronas << carona->solicitacoesPendentes[i]->nomeCompleto << (i == carona->solicitacoesPendentes.size() - 1 ? "" : ",");
                 }
@@ -228,9 +240,9 @@ private:
         arquivoCaronas.close();
     }
 
-    // Carrega os dados dos usuários e caronas dos arquivos.
+    // Loads user and ride data from files.
     void carregarDados() {
-        // Carrega usuários
+        // Load users
         std::ifstream arquivoUsuarios("usuarios.txt");
         std::string linha, nome, email, tel, temVeiculo, modelo, cor, placa;
         if (arquivoUsuarios.is_open()) {
@@ -248,12 +260,13 @@ private:
                     std::getline(ss, placa, ';');
                     novoUsuario->adicionarVeiculo(modelo, cor, placa);
                 }
-                usuarios[nome] = novoUsuario;
+                // Use email as the key
+                usuariosPorEmail[email] = novoUsuario;
             }
         }
         arquivoUsuarios.close();
         
-        // Carrega caronas
+        // Load rides
         std::ifstream arquivoCaronas("caronas.txt");
         if(arquivoCaronas.is_open()){
              while (std::getline(arquivoCaronas, linha)) {
@@ -272,28 +285,36 @@ private:
                 std::getline(ss, aprovadosStr, ';');
                 std::getline(ss, pendentesStr, ';');
 
-                if(usuarios.count(nomeMotorista)){
+                auto motoristaPtr = findUsuarioPorNome(nomeMotorista);
+
+                if(motoristaPtr){
                     vagas = std::stoi(vagasStr);
                     valor = std::stod(valorStr);
-                    auto novaCarona = std::make_shared<Carona>(origem, destino, data, vagas, valor, usuarios[nomeMotorista]);
+                    auto novaCarona = std::make_shared<Carona>(origem, destino, data, vagas, valor, motoristaPtr);
                     
-                    // Adiciona passageiros aprovados
-                    std::stringstream ssAprovados(aprovadosStr);
-                    std::string nomeAprovado;
-                    while(std::getline(ssAprovados, nomeAprovado, ',')){
-                        if(usuarios.count(nomeAprovado)) novaCarona->passageirosAprovados.push_back(usuarios[nomeAprovado]);
+                    // Add approved passengers by finding them by name
+                    if (!aprovadosStr.empty()) {
+                        std::stringstream ssAprovados(aprovadosStr);
+                        std::string nomeAprovado;
+                        while(std::getline(ssAprovados, nomeAprovado, ',')){
+                            auto passageiroPtr = findUsuarioPorNome(nomeAprovado);
+                            if(passageiroPtr) novaCarona->passageirosAprovados.push_back(passageiroPtr);
+                        }
                     }
 
-                    // Adiciona solicitações pendentes
-                    std::stringstream ssPendentes(pendentesStr);
-                    std::string nomePendente;
-                    while(std::getline(ssPendentes, nomePendente, ',')){
-                        if(usuarios.count(nomePendente)) novaCarona->solicitacoesPendentes.push_back(usuarios[nomePendente]);
+                    // Add pending requests by finding them by name
+                    if (!pendentesStr.empty()) {
+                        std::stringstream ssPendentes(pendentesStr);
+                        std::string nomePendente;
+                        while(std::getline(ssPendentes, nomePendente, ',')){
+                             auto passageiroPtr = findUsuarioPorNome(nomePendente);
+                            if(passageiroPtr) novaCarona->solicitacoesPendentes.push_back(passageiroPtr);
+                        }
                     }
 
                     caronasDisponiveis.push_back(novaCarona);
-                    // Adiciona ao histórico de todos os envolvidos
-                    usuarios[nomeMotorista]->historicoDeCaronas.push_back(novaCarona);
+                    // Add to the history of everyone involved
+                    motoristaPtr->historicoDeCaronas.push_back(novaCarona);
                     for(const auto& p : novaCarona->passageirosAprovados) p->historicoDeCaronas.push_back(novaCarona);
                     for(const auto& p : novaCarona->solicitacoesPendentes) p->historicoDeCaronas.push_back(novaCarona);
                 }
@@ -304,13 +325,13 @@ private:
 
 
 public:
-    // User Story 5: Manter perfil atualizado
+    // User Story 5: Maintain profile
     void gerenciarPerfil() {
         if (!usuarioLogado) return;
         
         int opcao;
         std::cout << "\n--- Gerenciar Perfil ---" << std::endl;
-        std::cout << "1. Editar Nome, Email e Telefone" << std::endl;
+        std::cout << "1. Editar Nome e Telefone" << std::endl;
         std::cout << "2. Adicionar/Modificar Veiculo" << std::endl;
         std::cout << "0. Voltar" << std::endl;
         std::cout << "Escolha uma opcao: ";
@@ -320,8 +341,6 @@ public:
         if (opcao == 1) {
             std::cout << "Novo nome completo: ";
             std::getline(std::cin, usuarioLogado->nomeCompleto);
-            std::cout << "Novo email: ";
-            std::getline(std::cin, usuarioLogado->email);
             std::cout << "Novo telefone: ";
             std::getline(std::cin, usuarioLogado->telefone);
             std::cout << "Perfil atualizado com sucesso!" << std::endl;
@@ -338,7 +357,7 @@ public:
         }
     }
     
-    // User Story 1: Oferecer carona
+    // User Story 1: Offer ride
     void telaOferecerCarona() {
         if (!usuarioLogado) return;
         if (!usuarioLogado->veiculo) {
@@ -370,7 +389,7 @@ public:
         std::cout << "\nCarona oferecida com sucesso!" << std::endl;
     }
 
-    // User Story 2: Gerenciar solicitações de carona
+    // User Story 2: Manage ride requests
     void telaGerenciarSolicitacoes() {
         if (!usuarioLogado) return;
         std::vector<std::shared_ptr<Carona>> minhasCaronas;
@@ -398,7 +417,7 @@ public:
         int escolhaCarona;
         std::cout << "\nEscolha a carona para gerenciar (ou 0 para sair): ";
         std::cin >> escolhaCarona;
-        if (escolhaCarona == 0 || escolhaCarona > minhasCaronas.size()) return;
+        if (escolhaCarona <= 0 || escolhaCarona > minhasCaronas.size()) return;
 
         auto caronaGerenciada = minhasCaronas[escolhaCarona-1];
         std::string nomePassageiro;
@@ -434,10 +453,10 @@ public:
         }
     }
 
-    // User Story 3 & 4: Buscar e solicitar carona
+    // User Story 3 & 4: Search for and request a ride
     void telaBuscarCarona() {
         if (!usuarioLogado) return;
-        std::string origem, destino, data;
+        std::string origem, destino;
         std::cout << "\n--- Buscar Carona ---" << std::endl;
         std::cout << "Origem (deixe em branco para ignorar): ";
         std::getline(std::cin, origem);
@@ -477,7 +496,7 @@ public:
         }
     }
 
-    // User Story 8: Ver notificações
+    // User Story 8: View notifications
     void telaVerNotificacoes() {
         if (!usuarioLogado || usuarioLogado->notificacoes.empty()) {
             std::cout << "\nNenhuma notificacao nova." << std::endl;
@@ -487,13 +506,13 @@ public:
         for (const auto& notif : usuarioLogado->notificacoes) {
             if(!notif->lida) {
                 std::cout << "  - " << notif->mensagem << std::endl;
-                notif->lida = true; // Marca como lida
+                notif->lida = true; // Mark as read
             }
         }
         std::cout << "-------------------------" << std::endl;
     }
     
-    // User Story 7: Histórico de caronas
+    // User Story 7: Ride history
     void telaHistorico() {
         if (!usuarioLogado || usuarioLogado->historicoDeCaronas.empty()) {
             std::cout << "\nVoce nao participou de nenhuma carona ainda." << std::endl;
@@ -530,11 +549,11 @@ public:
         if(!participouDeAlguma) std::cout << "Nenhuma." << std::endl;
     }
 
-    // User Story 6: Avaliar usuários
+    // User Story 6: Rate users
     void telaDeAvaliacao() {
         if (!usuarioLogado) return;
-        // Simulação: Aqui o sistema escolheria uma carona concluída recentemente.
-        // Para simplificar, vamos listar todas as caronas do histórico para avaliação.
+        // Simulation: Here the system would choose a recently completed ride.
+        // To simplify, we'll list all rides from history for rating.
         if (usuarioLogado->historicoDeCaronas.empty()) {
             std::cout << "Nao ha caronas no seu historico para avaliar." << std::endl;
             return;
@@ -551,7 +570,7 @@ public:
         auto caronaParaAvaliar = usuarioLogado->historicoDeCaronas[escolha-1];
         limparBufferEntrada();
 
-        // Se eu sou o motorista, avalio os passageiros
+        // If I am the driver, I rate the passengers
         if (caronaParaAvaliar->motorista == usuarioLogado) {
             if(caronaParaAvaliar->passageirosAprovados.empty()){
                 std::cout << "Esta carona nao teve passageiros para avaliar." << std::endl;
@@ -570,7 +589,7 @@ public:
                 passageiro->adicionarAvaliacao(avaliacao);
                 std::cout << "Avaliacao enviada!" << std::endl;
             }
-        } else { // Se eu sou passageiro, avalio o motorista
+        } else { // If I am a passenger, I rate the driver
              std::cout << "\nAvaliando o motorista: " << caronaParaAvaliar->motorista->nomeCompleto << std::endl;
             int nota;
             std::string comentario;
@@ -587,27 +606,28 @@ public:
 
 
     void login() {
-        std::string nome;
-        std::cout << "Digite seu nome de usuario para entrar ou criar uma conta: ";
-        std::getline(std::cin, nome);
+        std::string email;
+        std::cout << "Digite seu email para entrar ou criar uma conta: ";
+        std::getline(std::cin, email);
 
-        if (usuarios.find(nome) != usuarios.end()) {
-            usuarioLogado = usuarios[nome];
-            std::cout << "Bem-vindo(a) de volta, " << nome << "!" << std::endl;
+        if (usuariosPorEmail.count(email)) {
+            usuarioLogado = usuariosPorEmail[email];
+            std::cout << "Bem-vindo(a) de volta, " << usuarioLogado->nomeCompleto << "!" << std::endl;
         } else {
-            std::string email, tel;
+            std::string nome, tel;
             std::cout << "Parece que voce e novo por aqui! Vamos criar seu perfil." << std::endl;
-            std::cout << "Seu email: ";
-            std::getline(std::cin, email);
+            std::cout << "Seu nome completo: ";
+            std::getline(std::cin, nome);
             std::cout << "Seu telefone: ";
             std::getline(std::cin, tel);
-            usuarios[nome] = std::make_shared<Usuario>(nome, tel, email);
-            usuarioLogado = usuarios[nome];
+            auto novoUsuario = std::make_shared<Usuario>(nome, tel, email);
+            usuariosPorEmail[email] = novoUsuario;
+            usuarioLogado = novoUsuario;
             std::cout << "Conta criada com sucesso! Bem-vindo(a), " << nome << "!" << std::endl;
         }
     }
     
-    // Loop principal da aplicação.
+    // Main application loop.
     void rodar() {
         carregarDados();
         login();
@@ -632,7 +652,7 @@ public:
             limparBufferEntrada();
 
             switch (opcao) {
-                case 1: { // Menu Motorista
+                case 1: { // Driver Menu
                     int subOpcao;
                     std::cout << "\n-- Menu Motorista --\n1. Oferecer Carona\n2. Gerenciar Solicitacoes\n0. Voltar\nEscolha: ";
                     std::cin >> subOpcao;
@@ -641,7 +661,7 @@ public:
                     if(subOpcao == 2) telaGerenciarSolicitacoes();
                     break;
                 }
-                case 2: // Menu Passageiro
+                case 2: // Passenger Menu
                     telaBuscarCarona();
                     break;
                 case 3:
@@ -657,7 +677,7 @@ public:
                     telaDeAvaliacao();
                     break;
                 case 0:
-                    salvarDados(); // Salva os dados antes de sair
+                    salvarDados(); // Save data before exiting
                     std::cout << "Dados salvos. Ate logo!" << std::endl;
                     break;
                 default:
