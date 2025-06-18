@@ -1,0 +1,31 @@
+João Silva;Savassi;UFMG;18/06/2025 07:30;2;8.0;Carlos Pereira;Ana Souza
+Maria Oliveira;UFMG;Centro;18/06/2025 12:00;3;7.0;Sofia Lima;
+Lucas Santos;Buritis;UFMG;18/06/2025 08:00;1;9.0;;Pedro Costa,Julia Alves
+Gabriel Souza;UFMG;Pampulha;18/06/2025 17:30;2;5.0;Laura Martins;
+Matheus Fernandes;Contagem;UFMG;19/06/2025 07:00;3;12.0;Isabella Gomes,Manuela Ribeiro;Heloísa Dias
+Rafael Lima;UFMG;Savassi;19/06/2025 18:00;2;8.0;;Alice Barbosa
+Bruno Gomes;Betim;UFMG;19/06/2025 06:45;1;15.0;Enzo Moreira;
+Felipe Alves;UFMG;Funcionários;19/06/2025 16:00;2;6.0;;Miguel Carvalho
+Leonardo Martins;Castelo;UFMG;20/06/2025 08:15;3;7.0;Arthur Pereira;Davi Ferreira
+Ricardo Rocha;UFMG;Cidade Nova;20/06/2025 18:30;1;7.50;Bernardo Castro;
+Amanda Costa;Gutierrez;UFMG;20/06/2025 13:00;2;9.50;;Heitor Santos
+Juliana Ribeiro;UFMG;Belvedere;20/06/2025 22:00;3;11.0;Helena Fernandes;Valentina Rocha
+Fernanda Almeida;Venda Nova;UFMG;21/06/2025 07:45;2;6.50;Lorenzo Almeida;
+Patrícia Dias;UFMG;Praça da Liberdade;21/06/2025 12:30;1;7.0;Théo Gomes;
+Camila Barbosa;Santa Efigênia;UFMG;21/06/2025 09:00;3;8.0;;Carlos Pereira
+Tiago Moreira;UFMG;Contagem;22/06/2025 17:00;2;12.0;Ana Souza;Pedro Costa
+Gustavo Carvalho;Floresta;UFMG;22/06/2025 13:30;1;6.0;;
+Vinícius Pereira;UFMG;Betim;22/06/2025 19:00;3;15.0;Sofia Lima,Julia Alves;
+Larissa Ferreira;Anchieta;UFMG;23/06/2025 07:15;2;9.0;Laura Martins;Isabella Gomes,Manuela Ribeiro
+Beatriz Castro;UFMG;Ouro Preto;23/06/2025 18:45;1;7.0;Heloísa Dias;
+João Silva;UFMG;Shopping Del Rey;23/06/2025 13:00;2;5.0;;Alice Barbosa
+Maria Oliveira;Barreiro;UFMG;24/06/2025 07:00;3;10.0;Enzo Moreira;Miguel Carvalho
+Lucas Santos;UFMG;Lourdes;24/06/2025 17:45;1;9.0;Arthur Pereira;
+Gabriel Souza;Mangabeiras;UFMG;24/06/2025 08:30;2;10.0;Davi Ferreira,Bernardo Castro;
+Matheus Fernandes;UFMG;Estoril;25/06/2025 18:15;3;8.50;;Heitor Santos
+Rafael Lima;Prado;UFMG;25/06/2025 09:30;1;7.0;Helena Fernandes;
+Bruno Gomes;UFMG;Caiçara;25/06/2025 12:15;2;6.0;Valentina Rocha;Lorenzo Almeida,Théo Gomes
+Felipe Alves;Cidade Jardim;UFMG;26/06/2025 13:45;3;9.0;Carlos Pereira;
+Leonardo Martins;UFMG;Serra;26/06/2025 19:30;2;8.0;;Ana Souza,Pedro Costa
+Ricardo Rocha;Santa Tereza;UFMG;26/06/2025 07:00;1;7.50;Sofia Lima;
+Amanda Costa;UFMG;Pampulha;27/06/2025 16:30;2;5.0;Julia Alves,Laura Martins;Isabella Gomes
