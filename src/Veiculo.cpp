@@ -1,0 +1,12 @@
+#include "Veiculo.hpp"
+#include <iostream>
+namespace ufmg_carona {
+    // Construtor do veículo
+    Veiculo::Veiculo(const std::string& p, const std::string& ma, const std::string& mo, const std::string& c, int l) : _placa(p), _marca(ma), _modelo(mo), _cor(c), _total_de_lugares(l) {}
+    // Construtor padrão do veículo
+    Veiculo::Veiculo() : _total_de_lugares(0) {}
+    // Retorna o número total de lugares do veículo
+    int Veiculo::get_lugares() const { return _total_de_lugares; }
+    // Exibe as informações do veículo
+    void Veiculo::exibir_info() const { std::cout << "  Veiculo: " << _marca << " " << _modelo << ", Cor: " << _cor << ", Placa: " << _placa << std::endl; }
+}
