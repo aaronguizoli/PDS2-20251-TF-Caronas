@@ -1,40 +1,54 @@
-# Makefile Final com Estrutura de Diretórios Profissional
-
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -g -Iinclude # Alterado para C++11
-LDFLAGS = -static-libgcc -static-libstdc++
+CXXFLAGS = -std=c++11 -Wall -g
+LDFLAGS =
 
-# --- Estrutura de Diretórios ---
-INCLUDE_DIR = include
-SRC_DIR = src
-OBJ_DIR = obj
+# Diretórios
 BIN_DIR = bin
+OBJ_DIR = obj
+SRC_DIR = src
+INCLUDE_DIR = include
+TEST_DIR = tests
 
-# --- Arquivos ---
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
-EXECUTABLE = $(BIN_DIR)/app_carona
+# Executável principal
+APP_NAME = ufmg_carona_app
 
-# --- Regras de Compilação ---
-all: $(EXECUTABLE)
+# Executável de testes
+TEST_APP_NAME = ufmg_carona_tests
 
-$(EXECUTABLE): $(OBJECTS)
-	@mkdir -p $(BIN_DIR)
-	@echo "Ligando o programa..."
-	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(LDFLAGS)
+# Arquivos de objeto
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+# Regra padrão
+all: dirs $(BIN_DIR)/$(APP_NAME)
+
+dirs:
+	mkdir -p $(BIN_DIR) $(OBJ_DIR) $(TEST_DIR)
+
+# Compilação do aplicativo principal
+$(BIN_DIR)/$(APP_NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
-	@echo "Compilando $<..."
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
 
-# --- Regras de Limpeza e Execução ---
+# Regra para compilar e rodar os testes
+# Usa filter-out para excluir obj/main.o da lista de objetos vinculados para o executável de teste
+TEST_LINK_OBJS = $(filter-out $(OBJ_DIR)/main.o,$(OBJS))
+
+test: dirs $(OBJ_DIR)/testes.o $(TEST_LINK_OBJS)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) $(OBJ_DIR)/testes.o $(TEST_LINK_OBJS) -o $(BIN_DIR)/$(TEST_APP_NAME) $(LDFLAGS)
+	./$(BIN_DIR)/$(TEST_APP_NAME)
+
+$(OBJ_DIR)/testes.o: $(TEST_DIR)/testes.cpp
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+
+# Regra para rodar o aplicativo principal
+run: $(BIN_DIR)/$(APP_NAME)
+	./$(BIN_DIR)/$(APP_NAME)
+
+# Limpeza
 clean:
-	@echo "Limpando arquivos de build..."
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	rm -rf $(BIN_DIR) $(OBJ_DIR)
 
-run: all
-	@echo "Executando o programa..."
-	./$(EXECUTABLE)
-
-.PHONY: all clean run
+.PHONY: all clean run test dirs
