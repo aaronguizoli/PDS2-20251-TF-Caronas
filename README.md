@@ -1,7 +1,6 @@
-================================== App de Caronas UFMG ==================================
+App de Caronas UFMG
 
 Alunos: Ricardo Rocha, Aaron Guizoli, Italo Avelar e Igor Hendrix
-
 
 
 Apresentação do Problema:
