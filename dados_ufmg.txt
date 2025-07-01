@@ -3,3 +3,8 @@ Bruno Gomes;22233344455;15/05/1985;funcionario;0
 Carlos Silva;33344455566;10/12/1995;aluno;Engenharia Eletrica
 Daniela Costa;44455566677;20/07/1978;funcionario;0
 Eduardo Pereira;55566677788;05/03/2001;aluno;Medicina
+Fernanda Lima;66677788899;25/09/1998;aluno;Direito
+Guilherme Martins;77788899900;12/02/1999;aluno;Arquitetura
+Helena Oliveira;88899900011;30/11/2002;aluno;Letras
+Igor Santos;99900011122;18/06/1990;funcionario;1
+Juliana Almeida;00011122233;03/04/1997;aluno;Odontologia

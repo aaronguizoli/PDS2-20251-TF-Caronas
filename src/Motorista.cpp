@@ -1,9 +1,9 @@
 #include "Motorista.hpp"
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 namespace ufmg_carona {
-    // Construtor do Motorista - Ordem da lista de inicializacao ajustada
     Motorista::Motorista(std::string nome, std::string cpf, std::string telefone, std::string data_nascimento,
                          std::string email, std::string senha, Genero genero, std::string vinculo_tipo,
                          std::string detalhe_vinculo, std::string cnh_numero)
@@ -11,7 +11,6 @@ namespace ufmg_carona {
           _veiculos(),
           _cnh_numero(cnh_numero) {}
 
-    // Destrutor para liberar a memoria dos objetos Veiculo*
     Motorista::~Motorista() {
         for (Veiculo* v : _veiculos) {
             delete v;
@@ -21,13 +20,18 @@ namespace ufmg_carona {
 
     void Motorista::adicionar_veiculo(Veiculo* veiculo) {
         if (veiculo) {
+            for (const auto& v_existente : _veiculos) {
+                if (v_existente->get_placa() == veiculo->get_placa()) {
+                    std::cout << "ERRO: Veiculo com esta placa ja existe para este motorista. Nao adicionado." << std::endl;
+                    delete veiculo;
+                    return;
+                }
+            }
             _veiculos.push_back(veiculo);
-            std::cout << "Veiculo " << veiculo->get_placa() << " adicionado para o motorista " << get_nome() << "." << std::endl;
         }
     }
 
-    // ALTERACAO CRITICA: is_motorista() agora retorna true se o Motorista tem CNH, nao apenas se tem veiculos.
-    bool Motorista::is_motorista() const { return !_cnh_numero.empty(); } // Retorna true se a CNH nao estiver vazia
+    bool Motorista::is_motorista() const { return !_cnh_numero.empty(); }
 
     const std::string& Motorista::get_cnh_numero() const { return _cnh_numero; }
 
@@ -42,18 +46,40 @@ namespace ufmg_carona {
         return nullptr;
     }
 
+    Veiculo* Motorista::buscar_veiculo_por_indice(size_t indice) const {
+        if (indice < _veiculos.size()) {
+            return _veiculos[indice];
+        }
+        return nullptr;
+    }
+
+    bool Motorista::remover_veiculo(const std::string& placa) {
+        auto it = _veiculos.begin();
+        while (it != _veiculos.end()) {
+            if ((*it)->get_placa() == placa) {
+                delete *it;
+                it = _veiculos.erase(it);
+                return true;
+            } else {
+                ++it;
+            }
+        }
+        return false;
+    }
+
     void Motorista::imprimir_perfil() const {
         Usuario::imprimir_perfil();
         std::cout << "--- Informacoes de Motorista ---" << std::endl;
         std::cout << "CNH: " << _cnh_numero << std::endl;
         
-        if (_veiculos.empty()) { // Verifica se NAO possui veiculos para exibicao
+        if (_veiculos.empty()) {
             std::cout << "Nenhum veiculo cadastrado." << std::endl;
         } else {
             std::cout << "Veiculos Cadastrados (" << _veiculos.size() << "):" << std::endl;
-            for (const auto& veiculo_ptr : _veiculos) {
-                if (veiculo_ptr) {
-                    veiculo_ptr->exibir_info();
+            for (size_t i = 0; i < _veiculos.size(); ++i) {
+                std::cout << "  [" << (i + 1) << "] ";
+                if (_veiculos[i]) {
+                    _veiculos[i]->exibir_info();
                 }
             }
         }

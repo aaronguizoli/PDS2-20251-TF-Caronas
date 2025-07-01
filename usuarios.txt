@@ -1,4 +1,10 @@
-11122233344;Ana Souza;31987654321;01/01/2000;ana@ufmg.br;senha123;1;aluno;Ciencia da Computacao;0
-22233344455;Bruno Gomes;31998765432;15/05/1985;bruno@ufmg.br;senha123;0;funcionario;0;1;123456789
-33344455566;Carlos Silva;31976543210;10/12/1995;carlos@ufmg.br;outrasenha;0;aluno;Engenharia Eletrica;1;987654321
-44455566677;Daniela Costa;555555;20/07/1978;teste@;123;1;funcionario;0;1;12222333
+11122233344;Ana Souza;31987654321;01/01/2000;ana.souza@ufmg.br;senha123;1;aluno;Ciencia da Computacao;1;1345667
+22233344455;Bruno Gomes;31998765432;15/05/1985;bruno.gomes@ufmg.br;senha456;0;funcionario;0;1;123456789
+33344455566;Carlos Silva;31976543210;10/12/1995;carlos.silva@ufmg.br;outrasenha;0;aluno;Engenharia Eletrica;1;987654321
+44455566677;Daniela Costa;31988887777;20/07/1978;daniela.costa@ufmg.br;senha789;1;funcionario;0;0
+55566677788;Eduardo Pereira;31971326089;05/03/2001;eduardo.pereira@ufmg.br;senha101;0;aluno;Medicina;1;1234567890
+66677788899;Fernanda Lima;31966665555;25/09/1998;fernanda.lima@ufmg.br;senha202;1;aluno;Direito;0
+77788899900;Guilherme Martins;31955554444;12/02/1999;guilherme.martins@ufmg.br;senha303;0;aluno;Arquitetura;1;112233445
+88899900011;Helena Oliveira;31944443333;30/11/2002;helena.oliveira@ufmg.br;senha404;1;aluno;Letras;0
+99900011122;Igor Santos;31933332222;18/06/1990;igor.santos@ufmg.br;senha505;0;funcionario;1;1;556677889
+00011122233;Juliana Almeida;31922221111;03/04/1997;juliana.almeida@ufmg.br;senha606;1;aluno;Odontologia;0

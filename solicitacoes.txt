@@ -1,0 +1,5 @@
+44455566677;1;PENDENTE;Portaria da Reitoria;Shopping Del Rey;;;0;0
+66677788899;1;AGUARDANDO_RESPOSTA_PASSAGEIRO;Biblioteca Central;Avenida Fleming;Portaria da Biblioteca;Avenida Sicília;0;0
+88899900011;2;ACEITA;Mineirão;Praça da Liberdade;;;0;0
+00011122233;3;RECUSADA;Faculdade de Letras;Avenida do Contorno;;;0;0
+44455566677;4;ACEITA;ICEx;Praça da Savassi;;;1;1
